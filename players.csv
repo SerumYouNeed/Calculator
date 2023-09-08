@@ -1,1 +1,5 @@
-Greg,1234,0
+Greg,1234,0
+
+Kali,1235,0
+
+nampraw def user_table_score_update(name, score) w logs chyba za pomocą pandy albo sql zobacz jak zrobić csv z nagłówkami

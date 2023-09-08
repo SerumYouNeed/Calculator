@@ -3,6 +3,7 @@ import logs
 import sys
 import time
 from os import system, name
+#from account import user
 
 def main():
 
@@ -19,7 +20,7 @@ def main():
             logs.sign_up()
             incorrect_input = False
         elif choice_account == "2":
-            logs.log_in()
+            user = logs.log_in()
             incorrect_input = False
         elif choice_account == "q":
             incorrect_input = False
@@ -41,7 +42,13 @@ def main():
 
     if mode == "1":
         while True:
-            calc.add()
+            if calc.add():
+                user.update_score(1)
+            else:
+                print(f"{user.name}, {user.score} points.")
+                if logs.score_comparison(user.name, user.score):
+                    logs.user_table_score_update(user.name, user.score)
+                return False
     elif mode == "2":
         while True:
             calc.substract()
