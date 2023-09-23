@@ -1,6 +1,25 @@
 import csv
-import pandas as pd
 from account import account
+
+def log_in(name, password):
+    try:
+        with open("players.csv", "r") as csvfile:
+            reader = csv.DictReader(csvfile, fieldnames=["login","password","score"])
+            for row in reader:
+                if row["login"] == name:
+                    if row["password"] == password:
+                        current_player = account(name)
+                        print(f"Welcome {current_player.name}")
+                        return current_player
+                    else:
+                        print("Incorect password")
+                else:
+                    print("Incorrect user")
+    except FileNotFoundError:
+        pass
+
+
+'''
 
 def log_in():
     try:
@@ -58,3 +77,4 @@ def user_table_score_update(name, score):
                     writer.writerow({"score": score})
     except FileNotFoundError:
         pass
+'''

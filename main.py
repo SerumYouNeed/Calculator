@@ -3,10 +3,16 @@ import logs
 import sys
 import time
 from os import system, name
-#from account import user
+import labels, screens
 
-def main():
+root = screens.tk.Tk()
+root.geometry("700x450")
+root.title("World of algebra!")
 
+myapp = screens.App(root)
+
+myapp.mainloop()
+'''
     clear_screen()
     print("Welcome in \"The world of algebra\"!\n")
 
@@ -79,3 +85,4 @@ def clear_screen():
 
 if __name__ == "__main__":
     main()
+    '''
