@@ -1,88 +1,151 @@
 import calculus as calc
-import logs
-import sys
-import time
-from os import system, name
-import labels, screens
+import tkinter as tk
+from account import user
+import db
 
-root = screens.tk.Tk()
+database = r"users_db.db"
+# create a database connection
+conn = db.create_connection(database)
+# create tables
+if conn is not None:
+# create projects table
+    db.create_table(conn, db.sql_create_users_table)
+else:
+    print("Error! cannot create the database connection.")
+
+def solution_checker(equals, var, mode):
+    clear_frame(root)
+    if equals == var:
+        user.update_points(1)
+        tk.Label(root, text="Corretct. You earned 1 point.", foreground="black", font=("size, 22")).pack()
+        tk.Button(root, text="Next", background="orange", height=2, width=18, font=("size, 14"), command=lambda: select_mode(mode)).pack()      
+    else:
+        # Becouse fetchone() is returning a tuple-like object
+        best_user_score = db.get_score(conn, (user.name,))[0]
+        if best_user_score < user.points:
+            db.update_score(conn, (user.points, user.name,))
+        tk.Label(root, text="Incorrect. Your score is: " + str(user.points), foreground="black", font=("size, 22")).pack()
+        tk.Button(root, text="END", background="orange", height=2, width=18, font=("size, 14"), command=lambda: score_table()).pack()      
+        return False
+    
+def score_table():
+    clear_frame(root)
+    for player in db.print_scores(conn):
+        tk.Label(root, text=player, foreground="black", font=("size, 22")).pack()
+
+
+def select_mode(mode):
+    var = tk.IntVar()
+    if mode == "1":
+        a, b, equals = calc.add()     
+        clear_frame(root)
+        tk.Label(root, text=str(a) + " + " + str(b) + " =", foreground="black", font=("size, 26")).pack()
+        tk.Entry(root, width=20, font=("size, 22"), bd=5, textvariable=var).pack() 
+        tk.Button(root, text="CHECK", background="orange", height=2, width=18, font=("size, 14"), command=lambda: solution_checker(equals, getter(var), mode)).pack()
+    elif mode == "2":
+        a, b, equals = calc.substract()     
+        clear_frame(root)
+        tk.Label(root, text=str(a) + " - " + str(b) + " =", foreground="black", font=("size, 26")).pack()
+        tk.Entry(root, width=20, font=("size, 22"), bd=5, textvariable=var).pack() 
+        tk.Button(root, text="CHECK", background="orange", height=2, width=18, font=("size, 14"), command=lambda: solution_checker(equals, getter(var), mode)).pack()
+    elif mode == "3":
+        a, b, equals = calc.multiply()     
+        clear_frame(root)
+        tk.Label(root, text=str(a) + " * " + str(b) + " =", foreground="black", font=("size, 26")).pack()
+        tk.Entry(root, width=20, font=("size, 22"), bd=5, textvariable=var).pack() 
+        tk.Button(root, text="CHECK", background="orange", height=2, width=18, font=("size, 14"), command=lambda: solution_checker(equals, getter(var), mode)).pack()
+    elif mode == "4":
+        a, b, equals = calc.divide()     
+        clear_frame(root)
+        tk.Label(root, text=str(a) + " / " + str(b) + " =", foreground="black", font=("size, 26")).pack()
+        tk.Entry(root, width=20, font=("size, 22"), bd=5, textvariable=var).pack() 
+        tk.Button(root, text="CHECK", background="orange", height=2, width=18, font=("size, 14"), command=lambda: solution_checker(equals, getter(var), mode)).pack()
+        """
+    elif mode == "5":
+        a, b, equals = calc.quiz()     
+        clear_frame(root)
+        tk.Label(root, text=str(a) + " + " + str(b) + " =", foreground="black", font=("size, 26")).pack()
+        tk.Entry(root, width=20, font=("size, 22"), bd=5, textvariable=var).pack() 
+        tk.Button(root, text="CHECK", background="orange", height=2, width=18, font=("size, 14"), command=lambda: solution_checker(equals, getter(var), mode)).pack()
+    elif mode == "6":
+        a, b, equals = calc.convert()     
+        clear_frame(root)
+        tk.Label(root, text=str(a) + " + " + str(b) + " =", foreground="black", font=("size, 26")).pack()
+        tk.Entry(root, width=20, font=("size, 22"), bd=5, textvariable=var).pack() 
+        tk.Button(root, text="CHECK", background="orange", height=2, width=18, font=("size, 14"), command=lambda: solution_checker(equals, getter(var), mode)).pack()
+"""
+
+def sign_in(name, password):
+    user.name = name
+    user.password = password
+    with conn:
+        # create a new user
+        player = (name, password, user.score)
+        db.create_user(conn, player)
+    clear_frame(root)
+    tk.Label(root, text="Success! Now you can log in.", foreground="green", font=("size, 22"), pady=20).pack()
+    tk.Button(root, text="Logging", background="orange", height=2, width=18, font=("size, 14"), command=log_click).pack()   
+    
+def log_in(name, password):
+    user.name = name
+    user.password = password
+    counter = 3
+    try:
+        with conn:
+            player = (name, password)
+            if db.log_user(conn, player):
+                clear_frame(root)
+                var = tk.StringVar()
+                tk.Label(root, text="Welcome " + name + " !!!", foreground="green", font=("size, 22"), pady=20).pack()
+                tk.Label(root, text="Please, select game mode from the list below:", foreground="black", font=("size, 22")).pack()
+                tk.Radiobutton(root, text="+ Add", variable=var, value="1", font=("size, 16")).pack()
+                tk.Radiobutton(root, text="- Substract", variable=var, value="2", font=("size, 16")).pack()
+                tk.Radiobutton(root, text="* Multiple", variable=var, value="3", font=("size, 16")).pack()
+                tk.Radiobutton(root, text="/ Divide", variable=var, value="4", font=("size, 16")).pack()
+                tk.Radiobutton(root, text="Quiz", variable=var, value="5", font=("size, 16")).pack()
+                tk.Button(root, text="PLAY", background="orange", height=2, width=18, font=("size, 14"), command=lambda: select_mode(getter(var))).pack()
+            else:
+                clear_frame(root)
+                if counter > 0:
+                    counter -= 1
+                    tk.Label(root, text="Incorect. Please, try again.", foreground="green", font=("size, 22"), pady=20).pack()
+                    tk.Button(root, text="Logging", background="orange", height=2, width=18, font=("size, 14"), command=log_click).pack()
+                else:
+                    tk.Label(root, text="Access denied!!!", foreground="green", font=("size, 22"), pady=20).pack()
+    except FileNotFoundError:
+        pass
+
+def getter(par):
+    return par.get()
+
+def clear_frame(frame):
+    for widget in frame.winfo_children():
+        widget.destroy()
+
+def log_click(): 
+    clear_frame(root)
+    username = tk.StringVar()
+    tk.Entry(root, width=20, font=("size, 22"), bd=5, show="*", textvariable=username).pack()
+    password = tk.StringVar()
+    tk.Entry(root, width=20, font=("size, 22"), bd=5, show="*", textvariable=password).pack()   
+    tk.Button(root, text="Enter", background="orange", height=2, width=18, font=("size, 14"), command=lambda: log_in(getter(username), getter(password))).pack()
+
+def sign_click(): 
+    clear_frame(root)
+    username = tk.StringVar()
+    tk.Entry(root, width=20, font=("size, 22"), bd=5, textvariable=username).pack()
+    password = tk.StringVar()
+    tk.Entry(root, width=20, font=("size, 22"), bd=5, textvariable=password).pack()   
+    tk.Button(root, text="Enter", background="orange", height=2, width=18, font=("size, 14"), command=lambda: sign_in(getter(username), getter(password))).pack()
+
+root = tk.Tk()
 root.geometry("700x450")
 root.title("World of algebra!")
 
-myapp = screens.App(root)
+tk.Label(root, text="Welcome in \"The world of algebra\"", foreground="black", font=("size, 22"), pady=20).pack()
+tk.Label(root, text="If you have an account, please:", foreground="black", font=("size, 18"), pady=20).pack()
+tk.Button(root, text="Logging", background="orange", height=2, width=18, font=("size, 14"), command=log_click).pack()
+tk.Label(root, text="----- or -----", foreground="black", font=("size, 18"), pady=20).pack()
+tk.Button(root, text="Sign up", background="orange", height=2, width=18, font=("size, 14"), command=sign_click).pack()
 
-myapp.mainloop()
-'''
-    clear_screen()
-    print("Welcome in \"The world of algebra\"!\n")
-
-    incorrect_input = True
-    while incorrect_input:
-        choice_account = input("If you are new - press 1\n"
-                           "If you have an account - press 2\n"
-                           "For exit - press Q "
-                           ).lower()
-        if choice_account == "1":
-            logs.sign_up()
-            incorrect_input = False
-        elif choice_account == "2":
-            user = logs.log_in()
-            incorrect_input = False
-        elif choice_account == "q":
-            incorrect_input = False
-            clear_screen()
-            sys.exit("See you next time!")
-        else:
-            print("Incorrect input. Please, try again\n\n")
-            time.sleep(1)
-            clear_screen()
-
-    mode = input("Choose game mode:"
-            "1. Adding."
-            "2. Substracting."
-            "3. Multiplying."
-            "4. Division."
-            "5. Quiz."
-            "################"
-            "6. Converter.")
-
-    if mode == "1":
-        while True:
-            if calc.add():
-                user.update_score(1)
-            else:
-                print(f"{user.name}, {user.score} points.")
-                if logs.score_comparison(user.name, user.score):
-                    logs.user_table_score_update(user.name, user.score)
-                return False
-    elif mode == "2":
-        while True:
-            calc.substract()
-    elif mode == "3":
-        while True:
-            calc.substract()
-    elif mode == "4":
-        while True:
-            calc.divide()
-    elif mode == "5":
-        while True:
-            calc.quiz()
-    elif mode == "6":
-        calc.converter()
-    else:
-        print("Try again")
-
-# This function clears console depending on
-def clear_screen():
-
-    # For windows
-    if name == "nt":
-        _ = system("cls")
-
-    # For os. name "posix" - mac and linux
-    else:
-        _ = system("clear")
-
-if __name__ == "__main__":
-    main()
-    '''
+root.mainloop()

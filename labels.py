@@ -1,1 +1,0 @@
-welcome = "Welcome in \"The world of algebra\""

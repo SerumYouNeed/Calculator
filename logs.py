@@ -8,13 +8,13 @@ def log_in(name, password):
             for row in reader:
                 if row["login"] == name:
                     if row["password"] == password:
-                        current_player = account(name)
-                        print(f"Welcome {current_player.name}")
-                        return current_player
+                        name = account(name)
+                        l1 = tk.Label(text="Welcome in \"The world of algebra\"", foreground="black", font=("size, 22"), pady=20)
+                        l1.pack()
                     else:
-                        print("Incorect password")
+                        return f"Incorect password"
                 else:
-                    print("Incorrect user")
+                    return f"Incorrect user"
     except FileNotFoundError:
         pass
 
