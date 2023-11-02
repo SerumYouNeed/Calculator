@@ -60,20 +60,21 @@ def select_mode(mode):
         tk.Label(root, text=str(a) + " / " + str(b) + " =", foreground="black", font=("size, 26")).pack()
         tk.Entry(root, width=20, font=("size, 22"), bd=5, textvariable=var).pack() 
         tk.Button(root, text="CHECK", background="orange", height=2, width=18, font=("size, 14"), command=lambda: solution_checker(equals, getter(var), mode)).pack()
-        """
     elif mode == "5":
-        a, b, equals = calc.quiz()     
+        a, b, equals, sign = calc.quiz()     
         clear_frame(root)
-        tk.Label(root, text=str(a) + " + " + str(b) + " =", foreground="black", font=("size, 26")).pack()
+        tk.Label(root, text=str(a) + sign + str(b) + " =", foreground="black", font=("size, 26")).pack()
         tk.Entry(root, width=20, font=("size, 22"), bd=5, textvariable=var).pack() 
         tk.Button(root, text="CHECK", background="orange", height=2, width=18, font=("size, 14"), command=lambda: solution_checker(equals, getter(var), mode)).pack()
     elif mode == "6":
-        a, b, equals = calc.convert()     
+        a, b, equals = convert()     
         clear_frame(root)
         tk.Label(root, text=str(a) + " + " + str(b) + " =", foreground="black", font=("size, 26")).pack()
         tk.Entry(root, width=20, font=("size, 22"), bd=5, textvariable=var).pack() 
         tk.Button(root, text="CHECK", background="orange", height=2, width=18, font=("size, 14"), command=lambda: solution_checker(equals, getter(var), mode)).pack()
-"""
+
+def convert():
+    
 
 def sign_in(name, password):
     user.name = name
@@ -103,6 +104,7 @@ def log_in(name, password):
                 tk.Radiobutton(root, text="* Multiple", variable=var, value="3", font=("size, 16")).pack()
                 tk.Radiobutton(root, text="/ Divide", variable=var, value="4", font=("size, 16")).pack()
                 tk.Radiobutton(root, text="Quiz", variable=var, value="5", font=("size, 16")).pack()
+                tk.Radiobutton(root, text="CONVERT", variable=var, value="5", font=("size, 16")).pack()
                 tk.Button(root, text="PLAY", background="orange", height=2, width=18, font=("size, 14"), command=lambda: select_mode(getter(var))).pack()
             else:
                 clear_frame(root)
