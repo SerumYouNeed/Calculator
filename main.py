@@ -1,6 +1,8 @@
 import calculus as calc
 import tkinter as tk
+import tkinter.ttk as ttk
 from account import user
+from screens import root, b1, b2, l1, l2, l3
 import db
 
 database = r"users_db.db"
@@ -20,7 +22,7 @@ def solution_checker(equals, var, mode):
         tk.Label(root, text="Corretct. You earned 1 point.", foreground="black", font=("size, 22")).pack()
         tk.Button(root, text="Next", background="orange", height=2, width=18, font=("size, 14"), command=lambda: select_mode(mode)).pack()      
     else:
-        # Becouse fetchone() is returning a tuple-like object
+        # Because fetchone() is returning a tuple-like object
         best_user_score = db.get_score(conn, (user.name,))[0]
         if best_user_score < user.points:
             db.update_score(conn, (user.points, user.name,))
@@ -32,7 +34,6 @@ def score_table():
     clear_frame(root)
     for player in db.print_scores(conn):
         tk.Label(root, text=player, foreground="black", font=("size, 22")).pack()
-
 
 def select_mode(mode):
     var = tk.IntVar()
@@ -67,14 +68,11 @@ def select_mode(mode):
         tk.Entry(root, width=20, font=("size, 22"), bd=5, textvariable=var).pack() 
         tk.Button(root, text="CHECK", background="orange", height=2, width=18, font=("size, 14"), command=lambda: solution_checker(equals, getter(var), mode)).pack()
     elif mode == "6":
-        a, b, equals = convert()     
+        a, b, equals = calc.challenge()     
         clear_frame(root)
         tk.Label(root, text=str(a) + " + " + str(b) + " =", foreground="black", font=("size, 26")).pack()
         tk.Entry(root, width=20, font=("size, 22"), bd=5, textvariable=var).pack() 
         tk.Button(root, text="CHECK", background="orange", height=2, width=18, font=("size, 14"), command=lambda: solution_checker(equals, getter(var), mode)).pack()
-
-def convert():
-    
 
 def sign_in(name, password):
     user.name = name
@@ -140,14 +138,12 @@ def sign_click():
     tk.Entry(root, width=20, font=("size, 22"), bd=5, textvariable=password).pack()   
     tk.Button(root, text="Enter", background="orange", height=2, width=18, font=("size, 14"), command=lambda: sign_in(getter(username), getter(password))).pack()
 
-root = tk.Tk()
-root.geometry("700x450")
-root.title("World of algebra!")
-
-tk.Label(root, text="Welcome in \"The world of algebra\"", foreground="black", font=("size, 22"), pady=20).pack()
-tk.Label(root, text="If you have an account, please:", foreground="black", font=("size, 18"), pady=20).pack()
-tk.Button(root, text="Logging", background="orange", height=2, width=18, font=("size, 14"), command=log_click).pack()
-tk.Label(root, text="----- or -----", foreground="black", font=("size, 18"), pady=20).pack()
-tk.Button(root, text="Sign up", background="orange", height=2, width=18, font=("size, 14"), command=sign_click).pack()
+l1.pack()
+l2.pack()
+b1.config(text="Logging", command=log_click)
+b1.pack()
+l3.pack()
+b2.config(text="Sign up", command=sign_click)
+b2.pack()
 
 root.mainloop()

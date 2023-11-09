@@ -34,7 +34,13 @@ sql_create_users_table = """ CREATE TABLE IF NOT EXISTS users (
                                 id integer PRIMARY KEY,
                                 username text NOT NULL,
                                 password text NOT NULL,
-                                score integer 
+                                score integer,
+                                score_adding integer,
+                                score_subtracting integer,
+                                score_muliplying ineger,
+                                score_dividing integer,
+                                score_quiz integer,
+                                score_chalenge integer 
                             ); """
 
 def create_user(conn, user):
