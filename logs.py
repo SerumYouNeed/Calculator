@@ -1,80 +1,40 @@
-import csv
-from account import account
+challenge
+walidacja hasel i loginow
 
-def log_in(name, password):
-    try:
-        with open("players.csv", "r") as csvfile:
-            reader = csv.DictReader(csvfile, fieldnames=["login","password","score"])
-            for row in reader:
-                if row["login"] == name:
-                    if row["password"] == password:
-                        name = account(name)
-                        l1 = tk.Label(text="Welcome in \"The world of algebra\"", foreground="black", font=("size, 22"), pady=20)
-                        l1.pack()
-                    else:
-                        return f"Incorect password"
-                else:
-                    return f"Incorrect user"
-    except FileNotFoundError:
-        pass
-
-
-'''
-
-def log_in():
-    try:
-        with open("players.csv", "r") as csvfile:
-            reader = csv.DictReader(csvfile, fieldnames=["login","password","score"])
-            login = input("Please, enter login: ")
-            for row in reader:
-                if row["login"] == login:
-                    password = input("Please, enter password: ")
-                    if row["password"] == password:
-                        current_player = account(login)
-                        print(f"Welcome {current_player.name}")
-                        return current_player
-                    else:
-                        print("Incorect password")
-                else:
-                    print("Incorrect user")
-    except FileNotFoundError:
-        pass
-
-# Przeprowadź walidację podwójnych loginów i haseł
-def sign_up():
-    try:
-        with open("players.csv", "a") as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=["login","password","score"])
-            login = input("Please, enter your nick: ")
-            password = input("Please, enter unique password: ")
-            score = 0
-            writer.writerow({"login": login, "password": password, "score": score})
-    except FileNotFoundError:
-        pass
-
-def score_comparison(name, score):
-    try:
-        with open("players.csv", "r") as csvfile:
-            reader = csv.DictReader(csvfile, fieldnames=["login","password","score"])
-            for row in reader:
-                if row["login"] == name:
-                    was_score = row["score"]
-                    if score > int(was_score):
-                        return True                   
-    except FileNotFoundError:
-        pass
-
-def user_table_score_update(name, score):
-    try:
-        df = pd.read_csv("players.csv")
-
-
-
-        with open("players.csv", "a") as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=["login","password","score"])
-            for row in writer:
-                if row["login"] == name:
-                    writer.writerow({"score": score})
-    except FileNotFoundError:
-        pass
-'''
+equals1, equation1 = mode()
+    equals2, equation2 = mode()
+    equals3, equation3 = mode()
+    sign1 = sign_choice()
+    sign2 = sign_choice()
+    if sign1 == "+":
+        mid1 = equals1 + equals2
+    elif sign1 == "-":
+        mid1 = equals1 - equals2
+        while mid1 < 0:
+            equals1, equation1 = mode()
+            equals2, equation2 = mode()
+            mid1 = equals1 - equals2
+    elif sign1 == "*":
+        mid1 = equals1 * equals2
+    elif sign1 == "/":
+        mid1 = equals1 / equals2
+        while equals1 % equals2 == 0:
+            equals1, equation1 = mode()
+            equals2, equation2 = mode()
+            mid1 = equals1 / equals2
+    if sign2 == "+":
+        equals = mid1 + equals3
+    elif sign2 == "-":
+        equals = mid1 - equals3
+        while equals < 0:
+            equals3, equation3 = mode()
+            equals = mid1 - equals3
+    elif sign2 == "*":
+        equals = mid1 * equals3
+    elif sign2 == "/":
+        equals = mid1 / equals3
+        while mid1 % equals3 == 0:
+            equals3, equation3 = mode()
+            equals = mid1 / equals3
+    expresion = f"({equation1}) {sign1} ({equation2}) {sign2} ({equation3})"
+    return (expresion, equals)

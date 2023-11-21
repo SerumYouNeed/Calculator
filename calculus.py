@@ -1,33 +1,38 @@
 from random import randrange
-import math
 
 def add():
     a = randrange(1, 101)
     b = randrange(1, 101)
     equals = a + b
-    sign = " + "
-    return (a, b, equals, sign)
+    equation = f"{a} + {b}"
+    return (equals, equation)
 
 def substract():
     a = randrange(1, 101)
     b = randrange(1, 101)
-    equals = a - b
-    sign = " - "
-    return (a, b, equals, sign)
+    while (a - b < 0):
+        a = randrange(1, 101)
+        b = randrange(2, 101)
+    equals = a / b
+    equation = f"{a} - {b}"
+    return (equals, equation)
 
 def multiply():
     a = randrange(0, 101)
-    b = randrange(0, 101)
+    b = randrange(0, 11)
     equals = a * b
-    sign = " * "
-    return (a, b, equals, sign)
+    equation = f"{a} * {b}"
+    return (equals, equation)
 
 def divide():
     a = randrange(1, 101)
-    b = randrange(1, 101)
+    b = randrange(2, 51)
+    while (a % b != 0):
+        a = randrange(1, 101)
+        b = randrange(2, 51)
     equals = a / b
-    sign = " / "
-    return (a, b, equals, sign)
+    equation = f"{a} / {b}"
+    return (equals, equation)
 
 def quiz():
     mode = randrange(1, 5)
@@ -43,25 +48,41 @@ def quiz():
         print("Quiz cannot run.")
 
 def challenge():
-
-    a1, b1, e1, s1 = mode()
-    a2, b2, e2, s2 = mode()
-    a3, b3, e3, s3 = mode()
+    equals1, equation1 = mode()
+    equals2, equation2 = mode()
+    equals3, equation3 = mode()
     sign1 = sign_choice()
     sign2 = sign_choice()
-    print(f"({a1} {s1} {b1}) {sign1} ({a2} {s2} {b2}) {sign2} ({a3} {s3} {b3})")
-          
+    if sign1 == "+":
+        mid1 = equals1 + equals2
+    elif sign1 == "-":
+        mid1 = equals1 - equals2
+    elif sign1 == "*":
+        mid1 = equals1 * equals2
+    elif sign1 == "/":
+        mid1 = equals1 / equals2
+    if sign2 == "+":
+        equals = mid1 + equals3
+    elif sign2 == "-":
+        equals = mid1 - equals3
+    elif sign2 == "*":
+        equals = mid1 * equals3
+    elif sign2 == "/":
+        equals = mid1 / equals3
+    expresion = f"({equation1}) {sign1} ({equation2}) {sign2} ({equation3})"
+    return (expresion, equals) 
+
 def mode():
     mode = randrange(1, 5)
     if mode == 1:
-        add()
+        return add()
     elif mode == 2:
-        substract()
+        return substract()
     elif mode == 3:
-        multiply()
+        return multiply()
     elif mode == 4:
-        divide()
-
+        return divide()
+        
 def sign_choice():
     mode = randrange(1, 5)
     if mode == 1:
@@ -73,23 +94,3 @@ def sign_choice():
     elif mode == 4:
         sign = "/"
     return sign
-    
-def convert():
-    numbers = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "VI": 6, "VII": 7, "VIII": 8, "IX": 9,
-               "X": 10, "XL": 40, "L": 50, "XC": 90, "C": 100, "CD": 400, "D": 500, "CM": 900, "M": 1000}
-    
-    roman = list(numbers.keys())
-    arabic = list(numbers.values())
-    roman_number = ""
-
-    how_large = randrange(1, 10001)
-    if how_large in arabic:
-        pass
-    else:
-        if how_large > 1000:
-            thous = math.floor(how_large / 1000)
-            hund = math.floor((how_large - thous * 1000) / 100)
-            tens = math.floor((how_large - thous * 1000 - hund * 100) / 10)
-            roman_number = thous * "M" + hund * "C" + tens * "X"
-    to_convert = randrange(len(roman))
-    
