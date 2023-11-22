@@ -13,19 +13,19 @@ def substract():
     while (a - b < 0):
         a = randrange(1, 101)
         b = randrange(2, 101)
-    equals = a / b
+    equals = a - b
     equation = f"{a} - {b}"
     return (equals, equation)
 
 def multiply():
-    a = randrange(0, 101)
-    b = randrange(0, 11)
+    a = randrange(0, 11)
+    b = randrange(0, 21)
     equals = a * b
     equation = f"{a} * {b}"
     return (equals, equation)
 
 def divide():
-    a = randrange(1, 101)
+    a = randrange(1, 51)
     b = randrange(2, 51)
     while (a % b != 0):
         a = randrange(1, 101)
@@ -36,52 +36,42 @@ def divide():
 
 def quiz():
     mode = randrange(1, 5)
-    if mode == 1:
-        add()
-    elif mode == 2:
-        substract()
-    elif mode == 3:
-        multiply()
-    elif mode == 4:
-        divide()
-    else:
-        print("Quiz cannot run.")
+    match mode:
+        case 1:
+            eq = add()
+        case 2:
+            eq = substract()
+        case 3:
+            eq = multiply()
+        case 4:
+            eq = divide()
+    return eq
 
 def challenge():
-    equals1, equation1 = mode()
-    equals2, equation2 = mode()
-    equals3, equation3 = mode()
+    equals1, equation1 = quiz()
+    equals2, equation2 = quiz()
+    equals3, equation3 = quiz()
     sign1 = sign_choice()
     sign2 = sign_choice()
-    if sign1 == "+":
-        mid1 = equals1 + equals2
-    elif sign1 == "-":
-        mid1 = equals1 - equals2
-    elif sign1 == "*":
-        mid1 = equals1 * equals2
-    elif sign1 == "/":
-        mid1 = equals1 / equals2
-    if sign2 == "+":
-        equals = mid1 + equals3
-    elif sign2 == "-":
-        equals = mid1 - equals3
-    elif sign2 == "*":
-        equals = mid1 * equals3
-    elif sign2 == "/":
-        equals = mid1 / equals3
-    expresion = f"({equation1}) {sign1} ({equation2}) {sign2} ({equation3})"
-    return (expresion, equals) 
-
-def mode():
-    mode = randrange(1, 5)
-    if mode == 1:
-        return add()
-    elif mode == 2:
-        return substract()
-    elif mode == 3:
-        return multiply()
-    elif mode == 4:
-        return divide()
+    match sign1:
+        case "+":
+            mid1 = equals1 + equals2
+        case "-":
+            mid1 = equals1 - equals2
+            while (mid1 < 0):
+                equals1, equation1 = quiz()
+                equals2, equation2 = quiz()
+                mid1 = equals1 - equals2
+        case "*":
+            mid1 = equals1 * equals2
+        case "/":
+            mid1 = equals1 / equals2
+            while (equals1 % equals2 != 0):
+                equals1, equation1 = quiz()
+                equals2, equation2 = quiz()
+                mid1 = equals1 / equals2
+    expresion = f"({equation1}) {sign1} ({equation2})"
+    return (expresion, mid1) 
         
 def sign_choice():
     mode = randrange(1, 5)

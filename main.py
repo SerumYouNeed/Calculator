@@ -1,6 +1,5 @@
 import calculus as calc
 import tkinter as tk
-import tkinter.ttk as ttk
 from account import user
 from screens import root, MyButton, MyLabel, MyEntry, MyRadio, helv36, helv28
 import db
@@ -144,6 +143,7 @@ def clear_frame(frame):
 
 def log_click(): 
     clear_frame(root)
+    root.configure(bg="SkyBlue1")
     username = tk.StringVar()
     MyEntry(textvariable=username).pack()
     password = tk.StringVar()
@@ -152,6 +152,7 @@ def log_click():
 
 def sign_click(): 
     clear_frame(root)
+    root.configure(bg="SkyBlue1")
     username = tk.StringVar()
     MyEntry(textvariable=username).pack()
     password = tk.StringVar()
