@@ -1,2 +1,0 @@
-
-walidacja hasel i loginow

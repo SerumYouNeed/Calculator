@@ -38,7 +38,6 @@ class MyEntry(tk.Entry):
         self['bd'] = self.bd
         self['textvariable'] = self.textvariable
 
-
 class MyButton(tk.Button):
     def __init__(self, text, command, font=("size, 20"), color="RoyalBlue1", activebackground="RoyalBlue4", foreground="black", activeforeground="black", cursor="hand2", width=16, height=1, x=0, y=7,**kwargs):
         self.text = text
@@ -70,7 +69,6 @@ class MyButton(tk.Button):
         self['cursor'] = self.cursor
         #self.grid(row=self.row, column=self.column)
         
-
 class MyLabel(tk.Label):
     def __init__(self, text, font=("size, 22"), color="SkyBlue1", foreground="black", x=5, y=20, **kwargs):
         self.text = text

@@ -105,13 +105,20 @@ def sign_in(name, password):
     user.name = name
     user.password = password
     with conn:
-        # create a new user
-        player = (name, password, user.score)
-        db.create_user(conn, player)
-    clear_frame(root)
-    MyLabel("Success! Now you can log in.").pack()
-    MyButton("Logging", log_click).pack()
-    
+        # checking if username is unique
+        if db.login_avb(conn, (name,)):
+            # create a new user
+            player = (name, password, user.score)
+            db.create_user(conn, player)
+            clear_frame(root)
+            MyLabel("Success! Now you can log in.").pack()
+            MyButton("Logging", log_click).pack()
+        else:
+            clear_frame(root)
+            MyLabel(f"Sorry. It seems that name {name} is not unique.").pack()
+            MyLabel("Try different one.").pack()
+            MyButton("Try again.", sign_click).pack()
+
 def log_in(name, password):
     user.name = name
     user.password = password

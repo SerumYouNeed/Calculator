@@ -43,6 +43,21 @@ sql_create_users_table = """ CREATE TABLE IF NOT EXISTS users (
                                 score_chalenge integer 
                             ); """
 
+def login_avb(conn, name):
+    """
+    Check if creating login is unique
+    :param conn:
+    :param name:
+    :return: True if unique
+    """
+    sql = ''' SELECT "username" FROM users WHERE "username"=? '''
+    cur = conn.cursor()
+    cur.execute(sql, name)
+    conn.commit()
+    user = cur.fetchone()
+    if user:
+        return False
+
 def create_user(conn, user):
     """
     Create a new user in users table
